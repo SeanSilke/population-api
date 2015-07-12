@@ -1,10 +1,8 @@
-
-
 var responses = {
     '/countries': [
         {name: 'Cameroon', continent: 'Africa'},
-        {name :'Fiji Islands', continent: 'Oceania'},
-        {name: 'Guatemala', continent: 'North America'},
+        {name: 'Fiji Islands', continent: 'Oceania'},
+        {name: 'Guatemala', continent: 'North Americacd'},
         {name: 'Japan', continent: 'Asia'},
         {name: 'Yugoslavia', continent: 'Europe'},
         {name: 'Tanzania', continent: 'Africa'}
@@ -27,46 +25,48 @@ var responses = {
     ]
 };
 
+var SelectedCountry = "Africa";
 
 
 var isCountryInAfrica = function (country) {
-  var isThisCountry = function(thatCountry){
-    return thatCountry.name == country
-  }
+    var isThisCountry = function (thatCountry) {
+            return thatCountry.name == country
+        },
+        whereIsCountry = " ";
 
-  var whereIsCountry = responses['/countries']
-                                .filter(isThisCountry)
-                                .pop()["continent"]
-                                
-  return whereIsCountry == 'Africa'
-}
+    whereIsCountry = responses['/countries']
+                        .filter(isThisCountry)
+                        .pop()["continent"];
 
-var whereIsCitie = function(citie){
-  var isThisCitie = function (thatCitie){
-    return thatCitie.name == citie
-  }
-  return responses['/cities']
-          .filter(isThisCitie)
-          .pop()["country"] //With es6 we can use Array.find then no pop  needed
-}
+    return whereIsCountry == SelectedCountry
+};
 
-var isCitieInAfrica = function(citie){
-  var country = whereIsCitie(citie)
-  return isCountryInAfrica(country)
-}
+var whereIsCitie = function (citie) {
+    var isThisCitie = function (thatCitie) {
+        return thatCitie.name == citie
+    };
+    return responses['/cities']
+        .filter(isThisCitie)
+        .pop()["country"]; //With es6 we can use Array.find then no pop  needed
+};
 
-var isPopulationInAfrica = function(populations) {
-  var citie = populations.name
-  return isCitieInAfrica(citie)
-}
+var isCitieInAfrica = function (citie) {
+    var country = whereIsCitie(citie);
+    return isCountryInAfrica(country)
+};
 
-var sumPopulation = function(acc,population){
-  return acc + population.count
-}
+var isAfricanPopulation = function (populations) {
+    var citie = populations.name;
+    return isCitieInAfrica(citie)
+};
 
-var population = responses['/populations'].filter(isPopulationInAfrica)
-                                          .reduce(sumPopulation, 0)
+var sumPopulation = function (acc, population) {
+    return acc + population.count
+};
+
+var population = responses['/populations'].filter(isAfricanPopulation)
+    .reduce(sumPopulation, 0);
 
 console.log(
-  'Total population in African cities: ' + population
-)
+    'Total population in ' + SelectedCountry + ' cities: ' + population
+);
