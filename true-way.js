@@ -1,31 +1,49 @@
-var responses = {
-    '/countries': [
-        {name: 'Cameroon', continent: 'Africa'},
-        {name: 'Fiji Islands', continent: 'Oceania'},
-        {name: 'Guatemala', continent: 'North Americacd'},
-        {name: 'Japan', continent: 'Asia'},
-        {name: 'Yugoslavia', continent: 'Europe'},
-        {name: 'Tanzania', continent: 'Africa'}
-    ],
-    '/cities': [
-        {name: 'Bamenda', country: 'Cameroon'},
-        {name: 'Suva', country: 'Fiji Islands'},
-        {name: 'Quetzaltenango', country: 'Guatemala'},
-        {name: 'Osaka', country: 'Japan'},
-        {name: 'Subotica', country: 'Yugoslavia'},
-        {name: 'Zanzibar', country: 'Tanzania'},
-    ],
-    '/populations': [
-        {count: 138000, name: 'Bamenda'},
-        {count: 77366, name: 'Suva'},
-        {count: 90801, name: 'Quetzaltenango'},
-        {count: 2595674, name: 'Osaka'},
-        {count: 100386, name: 'Subotica'},
-        {count: 157634, name: 'Zanzibar'}
-    ]
-};
+/**
+ * Реализация API, не изменяйте ее
+ * @param {string} url
+ * @param {function} callback
+ */
+function getData(url, callback) {
+    var RESPONSES = {
+        '/countries': [
+            {name: 'Cameroon', continent: 'Africa'},
+            {name :'Fiji Islands', continent: 'Oceania'},
+            {name: 'Guatemala', continent: 'North America'},
+            {name: 'Japan', continent: 'Asia'},
+            {name: 'Yugoslavia', continent: 'Europe'},
+            {name: 'Tanzania', continent: 'Africa'}
+        ],
+        '/cities': [
+            {name: 'Bamenda', country: 'Cameroon'},
+            {name: 'Suva', country: 'Fiji Islands'},
+            {name: 'Quetzaltenango', country: 'Guatemala'},
+            {name: 'Osaka', country: 'Japan'},
+            {name: 'Subotica', country: 'Yugoslavia'},
+            {name: 'Zanzibar', country: 'Tanzania'},
+        ],
+        '/populations': [
+            {count: 138000, name: 'Bamenda'},
+            {count: 77366, name: 'Suva'},
+            {count: 90801, name: 'Quetzaltenango'},
+            {count: 2595674, name: 'Osaka'},
+            {count: 100386, name: 'Subotica'},
+            {count: 157634, name: 'Zanzibar'}
+        ]
+    };
 
-var SelectedCountry = "Africa";
+    setTimeout(function () {
+        var result = RESPONSES[url];
+        if (!result) {
+            return callback('Unknown url');
+        }
+
+        callback(null, result);
+    }, Math.round(Math.random * 1000));
+}
+
+/**
+ * Ваши изменения ниже
+ */
 
 
 var isCountryInAfrica = function (country) {
@@ -38,7 +56,7 @@ var isCountryInAfrica = function (country) {
                         .filter(isThisCountry)
                         .pop()["continent"];
 
-    return whereIsCountry == SelectedCountry
+    return whereIsCountry == "Africa"
 };
 
 var whereIsCitie = function (citie) {
@@ -64,9 +82,25 @@ var sumPopulation = function (acc, population) {
     return acc + population.count
 };
 
-var population = responses['/populations'].filter(isAfricanPopulation)
-    .reduce(sumPopulation, 0);
+var populationOfAfrica = function(){
+    return  responses['/populations']
+             .filter(isAfricanPopulation)
+             .reduce(sumPopulation, 0);
+}
 
-console.log(
-    'Total population in ' + SelectedCountry + ' cities: ' + population
-);
+
+
+var requests = ['/countries', '/cities', '/populations'];
+var responses = {};
+
+requests.forEach(
+  function(request){
+    var callback = function(error, result){
+      responses[request] = result
+      if (Object.keys(responses).length == 3){
+        console.log('Total population in African cities: ' + populationOfAfrica());
+      }
+    }
+    getData(request, callback);
+  }
+)
