@@ -55,7 +55,6 @@ for (i = 0; i < 3; i++) {
     // console.log(request)
     // var l = [];  //!!! first improvement ?
     var callback = function (error, result) {
-        console.log(l)
         // console.log("hi from callback")
 
         ////
