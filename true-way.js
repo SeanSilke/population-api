@@ -88,7 +88,33 @@ var populationOfAfrica = function(){
              .reduce(sumPopulation, 0);
 }
 
+var theCountry = ""
 
+var isPopulationOfThisCountry = function(population){
+  //!!!
+  return trye
+}
+
+var populationOfThisCountry = function(){
+  //!!! добавить проверку если что-то в массиве после фильтрации
+  return  responses['/populations']
+           .filter(isPopulationOfThisCountry)
+           .reduce(sumPopulation, 0);
+}
+
+
+var theCitie = ""
+
+var isPopulationOfThisCitie = function (population){
+  return population.name == theCitie
+}
+
+var populationOfThisCitie = function(){
+  //!!! добавить проверку если что-то в массиве после фильтрации
+  return  responses['/populations']
+           .filter(isPopulationOfThisCitie)
+           .reduce(sumPopulation, 0);
+}
 
 var requests = ['/countries', '/cities', '/populations'];
 var responses = {};
@@ -99,8 +125,26 @@ requests.forEach(
       responses[request] = result
       if (Object.keys(responses).length == 3){
         console.log('Total population in African cities: ' + populationOfAfrica());
+        mainDialog();
       }
     }
     getData(request, callback);
   }
 )
+
+var mainDialog = function(){
+  if(window.confirm("Do you want to know population of other country or city?")){
+    var country = window.prompt("Enter the country name to find its population.")
+    if (country){
+       console.log(country)
+      }
+    // var citie = window.prompt("Enter the citie name to find its population.")
+    // if (citie){
+    //    theCitie = citie;
+    //    console.log("Total population of " + citie + " is: " + populationOfThisCitie())
+    //   }
+    mainDialog(); //continue dialogue
+  }else {
+    //do nothing
+  }
+}
