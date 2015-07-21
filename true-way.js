@@ -45,18 +45,8 @@ function getData(url, callback) {
  * Ваши изменения ниже
  */
 
-
-var isCountryInAfrica = function (country) {
-    var isThisCountry = function (thatCountry) {
-            return thatCountry.name == country
-        },
-        whereIsCountry = " ";
-
-    whereIsCountry = responses['/countries']
-                        .filter(isThisCountry)
-                        .pop()["continent"];
-
-    return whereIsCountry == "Africa"
+var sumPopulation = function (acc, population) {
+    return acc + population.count
 };
 
 var whereIsCitie = function (citie) {
@@ -68,21 +58,27 @@ var whereIsCitie = function (citie) {
         .pop()["country"]; //With es6 we can use Array.find then no pop  needed
 };
 
-var isCitieInAfrica = function (citie) {
-    var country = whereIsCitie(citie);
-    return isCountryInAfrica(country)
-};
+var whereIsCountry = function (country){
+  var isThisCountry = function (thatCountry) {
+      return thatCountry.name == country
+  };
+  return responses['/countries']
+           .filter(isThisCountry)
+            .pop()["continent"]; //With es6 we can use Array.find then no pop  needed
+}
+
+var theContinent = "Africa"
 
 var isAfricanPopulation = function (populations) {
     var citie = populations.name;
-    return isCitieInAfrica(citie)
-};
-
-var sumPopulation = function (acc, population) {
-    return acc + population.count
+    var country = whereIsCitie(citie);
+    var continent = whereIsCountry(country)
+    return continent == "Africa"
 };
 
 var populationOfAfrica = function(){
+    //!!! добавить проверку если что-то в массиве после фильтрации и потом суммировать
+    //!!! Если массив пуст - возвращать строку : "по данному запросу нету данных"
     return  responses['/populations']
              .filter(isAfricanPopulation)
              .reduce(sumPopulation, 0);
@@ -91,17 +87,17 @@ var populationOfAfrica = function(){
 var theCountry = ""
 
 var isPopulationOfThisCountry = function(population){
-  //!!!
-  return trye
+  var cities = population.name;
+  return whereIsCitie(cities) ==  theCountry
 }
 
 var populationOfThisCountry = function(){
-  //!!! добавить проверку если что-то в массиве после фильтрации
+  //!!! добавить проверку если что-то в массиве после фильтрации и потом суммировать
+  //!!! Если массив пуст - возвращать строку : "по данному запросу нету данных"
   return  responses['/populations']
            .filter(isPopulationOfThisCountry)
            .reduce(sumPopulation, 0);
 }
-
 
 var theCitie = ""
 
@@ -110,7 +106,8 @@ var isPopulationOfThisCitie = function (population){
 }
 
 var populationOfThisCitie = function(){
-  //!!! добавить проверку если что-то в массиве после фильтрации
+  //!!! Добавить проверку если что-то в массиве после фильтрации
+  //!!! Если массив пуст - возвращать строку : "по данному запросу нету данных"
   return  responses['/populations']
            .filter(isPopulationOfThisCitie)
            .reduce(sumPopulation, 0);
@@ -136,14 +133,16 @@ var mainDialog = function(){
   if(window.confirm("Do you want to know population of other country or city?")){
     var country = window.prompt("Enter the country name to find its population.")
     if (country){
-       console.log(country)
+       theCountry = country;
+          console.log("Total population of country - '" + country + "' is: " + populationOfThisCountry())
       }
-    // var citie = window.prompt("Enter the citie name to find its population.")
-    // if (citie){
-    //    theCitie = citie;
-    //    console.log("Total population of " + citie + " is: " + populationOfThisCitie())
-    //   }
-    mainDialog(); //continue dialogue
+    var citie = window.prompt("Enter the citie name to find its population.")
+    if (citie){
+       theCitie = citie;
+       console.log("Total population of citie - '" + citie + "' is: " + populationOfThisCitie())
+      }
+    //continue dialogue
+    mainDialog();
   }else {
     //do nothing
   }
