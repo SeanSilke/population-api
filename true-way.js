@@ -76,11 +76,11 @@ var isPopulationOfThisContinent = function (populations) {
     return continent == theContinent
 };
 
-var populationOfThisContinent = function(){
+var populationOfThisContinent = function(populationPredicate){
     //!!! добавить проверку если что-то в массиве после фильтрации и потом суммировать
     //!!! Если массив пуст - возвращать строку : "по данному запросу нету данных"
     return  responses['/populations']
-             .filter(isPopulationOfThisContinent)
+             .filter(populationPredicate)
              .reduce(sumPopulation, 0);
 }
 
@@ -91,11 +91,11 @@ var isPopulationOfThisCountry = function(population){
   return whereIsCitie(cities) ==  theCountry
 }
 
-var populationOfThisCountry = function(){
+var populationOfThisCountry = function(populationPredicate){
   //!!! добавить проверку если что-то в массиве после фильтрации и потом суммировать
   //!!! Если массив пуст - возвращать строку : "по данному запросу нету данных"
   return  responses['/populations']
-           .filter(isPopulationOfThisCountry)
+           .filter(populationPredicate)
            .reduce(sumPopulation, 0);
 }
 
@@ -105,11 +105,11 @@ var isPopulationOfThisCitie = function (population){
   return population.name == theCitie
 }
 
-var populationOfThisCitie = function(){
+var populationOfThisCitie = function(populationPredicate){
   //!!! Добавить проверку если что-то в массиве после фильтрации
   //!!! Если массив пуст - возвращать строку : "по данному запросу нету данных"
   return  responses['/populations']
-           .filter(isPopulationOfThisCitie)
+           .filter(populationPredicate)
            .reduce(sumPopulation, 0);
 }
 
@@ -121,7 +121,7 @@ requests.forEach(
     var callback = function(error, result){
       responses[request] = result
       if (Object.keys(responses).length == 3){
-        console.log('Total population in African cities: ' + populationOfThisContinent());
+        console.log('Total population in African cities: ' + populationOfThisContinent(isPopulationOfThisContinent));
         mainDialog();
       }
     }
@@ -134,12 +134,12 @@ var mainDialog = function(){
     var country = window.prompt("Enter the country name to find its population.")
     if (country){
        theCountry = country;
-          console.log("Total population of country - '" + country + "' is: " + populationOfThisCountry())
+          console.log("Total population of country - '" + country + "' is: " + populationOfThisCountry(isPopulationOfThisCountry))
       }
     var citie = window.prompt("Enter the citie name to find its population.")
     if (citie){
        theCitie = citie;
-       console.log("Total population of citie - '" + citie + "' is: " + populationOfThisCitie())
+       console.log("Total population of citie - '" + citie + "' is: " + populationOfThisCitie(isPopulationOfThisCitie))
       }
     //continue dialogue
     mainDialog();
