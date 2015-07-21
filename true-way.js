@@ -69,18 +69,18 @@ var whereIsCountry = function (country){
 
 var theContinent = "Africa"
 
-var isAfricanPopulation = function (populations) {
+var isPopulationOfThisContinent = function (populations) {
     var citie = populations.name;
     var country = whereIsCitie(citie);
     var continent = whereIsCountry(country)
-    return continent == "Africa"
+    return continent == theContinent
 };
 
-var populationOfAfrica = function(){
+var populationOfThisContinent = function(){
     //!!! добавить проверку если что-то в массиве после фильтрации и потом суммировать
     //!!! Если массив пуст - возвращать строку : "по данному запросу нету данных"
     return  responses['/populations']
-             .filter(isAfricanPopulation)
+             .filter(isPopulationOfThisContinent)
              .reduce(sumPopulation, 0);
 }
 
@@ -121,7 +121,7 @@ requests.forEach(
     var callback = function(error, result){
       responses[request] = result
       if (Object.keys(responses).length == 3){
-        console.log('Total population in African cities: ' + populationOfAfrica());
+        console.log('Total population in African cities: ' + populationOfThisContinent());
         mainDialog();
       }
     }
