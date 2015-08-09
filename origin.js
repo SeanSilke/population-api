@@ -48,6 +48,9 @@ var requests = ['/countries', '/cities', '/populations'];
 var responses = {};
 
 for (i = 0; i < 3; i++) {
+  //The fix Is to frame loop body with IIFE to enclose i
+  //Start of IIFE
+  (function(i){
     var request = requests[i];
     var callback = function (error, result) {
         responses[request] = result;
@@ -84,4 +87,6 @@ for (i = 0; i < 3; i++) {
     };
 
     getData(request, callback);
+  })(i)
+  //End of IIFE
 }
