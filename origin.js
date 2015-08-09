@@ -56,14 +56,13 @@ for (i = 0; i < 3; i++) {
             l.push(K);
 
         if (l.length == 3) {
-          //c - list of countries in Africa
             var c = [], cc = [], p = 0;
             for (i = 0; i < responses['/countries'].length; i++) {
                 if (responses['/countries'][i].continent === 'Africa') {
                     c.push(responses['/countries'][i].name);
                 }
             }
-         //cc - cities from countries in c
+
             for (i = 0; i < responses['/cities'].length; i++) {
                 for (j = 0; j < c.length; j++) {
                     if (responses['/cities'][i].country === c[j]) {
@@ -71,7 +70,7 @@ for (i = 0; i < 3; i++) {
                     }
                 }
             }
-        //p - summ of populations of cities in cc
+
             for (i = 0; i < responses['/populations'].length; i++) {
                 for (j = 0; j < cc.length; j++) {
                     if (responses['/populations'][i].name === cc[j]) {
